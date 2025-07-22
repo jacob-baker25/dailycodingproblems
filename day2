@@ -1,0 +1,42 @@
+"""
+Prompt: Given an array of integers, return a new array such that each element at index i of the new array is the product of all the numbers in the original array except the one at i.
+
+        For example, if our input was [1, 2, 3, 4, 5], the expected output would be [120, 60, 40, 30, 24]. If our input was [3, 2, 1], the expected output would be [2, 3, 6].
+
+        Follow-up: what if you can't use division?
+  
+Difficulty: Hard
+
+Approach: This solution passes through the list twice, once from the left and once from the right. In doing so, it is able
+          to calculate the product of all the digits to the left of the number, and then of all the digits to the right, and multiply them together,
+          to find the product of all of the integers except for the integer at a given spot. This approach is superior to one that uses division due to the fact
+          that it can handle the case where there is a zero in the array. 
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+"""
+
+def day2_bonus(nums):
+  n = len(nums)
+  result = [1]*n
+
+  left_product = 1
+  for i in range(n):
+    result[i] = left_product
+    left_product *= nums[i]
+
+  right_product = 1
+  for i in range(n-1, -1, -1):
+    result[i] *= right_product
+    right_product *= nums[i]
+
+  print(result)
+
+# test cases
+array = [1,2,3,4,5]
+day2_bonus(array)
+    
+array = [1,2,3,0,5]
+day2_bonus(array)   
+
