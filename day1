@@ -1,0 +1,38 @@
+"""
+Prompt: Given a list of numbers and a number k, return whether any two numbers from the list add up to k.
+
+    For example, given [10, 15, 3, 7] and k of 17, return true since 10 + 7 is 17.
+         
+    Bonus: Can you do this in one pass?
+
+Difficulty: Easy
+
+Approach: This solution goes through each number in the list and finds its complement, the number that it needs to be added with
+            to get k. If the complement is in the set of seen numbers, it returns true, and if not it adds that number to the set to see if it
+            is the complement of a future number. If it goes through a full pass without finding a complement for a number, it returns false, and no
+            combination must add to k.
+
+Time complexity: O(n)
+Space complexity: O(n)
+
+"""
+
+
+def add_to_k(numbers, k):
+  seen_nums = set()
+
+  for num in numbers:
+    complement = k - num
+    if complement in seen_nums:
+      return True
+    seen_nums.add(num)
+
+  return False
+
+
+#test case
+
+list = [10, 15, 3, 7]
+k = 17
+
+print(add_to_k(list, k))
