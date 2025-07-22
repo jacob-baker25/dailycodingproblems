@@ -1,0 +1,53 @@
+"""
+Prompt: Given the root to a binary tree, implement serialize(root), which serializes the tree into a string, and deserialize(s), which deserializes the string back into the tree.
+  
+Difficulty: Medium
+
+Approach: I serialized the binary tree in a way that would make it easier to deserialize later on. I did a preorder traversal to record the node values
+          and used 'null' to represent empty children. To deserialize, I recursively rebuild the tree by reading values in order from this string, creating nodes or None accordingly. 
+          This approach captures the tree structure efficiently with just one traversal.
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+"""
+
+class Node:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+          
+def serialize(root):
+  # helper function to perform preorder traversal
+    def dfs(node):
+        if not node:
+            return ['null'] # Use null to mark empty children
+        # visit root, then left, then right
+        return [node.val] + dfs(node.left) + dfs(node.right)
+    # join list into a single comma-separated string
+    return ','.join(dfs(root))
+
+          
+def deserialize(data):
+  # split the string into list and create iterator
+    values = iter(data.split(','))
+# helper function to rebuild tree in preorder
+    def dfs():
+        val = next(values)#iterate to next value
+        if val == 'null':
+            return None
+        #create a node with this value
+        node = Node(val)
+        node.left = dfs() #recursively build left and right subtree
+        node.right = dfs()
+        return node #return rebuild node
+    
+    return dfs() # start deserialization from the root
+
+
+# test case
+
+node = Node('root', Node('left', Node('left.left')), Node('right'))
+
+print(deserialize(serialize(node)).left.left.val == 'left.left')
