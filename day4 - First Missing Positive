@@ -1,0 +1,52 @@
+"""
+Prompt: Given an array of integers, find the first missing positive integer in linear time and constant space. In other words, find the lowest positive integer that does not exist in the array. 
+        The array can contain duplicates and negative numbers as well.
+
+        For example, the input [3, 4, -1, 1] should give 2. The input [1, 2, 0] should give 3.
+
+        You can modify the input array in-place.
+  
+Difficulty: Hard
+
+Approach: For this problem, in order to fulfill linear time and consant space, I first sort the array in one pass, without creating a new array. I did
+          so by rearranging the array so that each value greater then 0 was indexed at its value - 1. Then from here, all it has to do is find the first index
+          who's value does not follow this rule, and the value that is supposed to be at that index is the missing number. 
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+"""
+
+def lowest_missing(arr):
+
+  # first part is sorting the array in one pass
+
+  i=0
+  n = len(arr) 
+  # goes through length of array
+  while i < n:
+      # correct index for each integer is its value minus 1
+      correct = arr[i] - 1
+      # so if integer at a point is not at index value-1, and
+      # is between 1 and the length of the array...
+      if arr[i] != arr[correct] and 1 <= arr[i] <= n:
+        # swaps the integer to its correct spot
+        arr[i], arr[correct] = arr[correct], arr[i]
+      else:
+        # only increments when an integer is at its correct spot
+        i+=1  
+
+    # now the postive intgers are sorted, must now find lowest missing
+
+  #goes through list until value at a spot is not equal to index+1
+  for i in range(len(arr)):
+    if arr[i] != i+1:
+      return i+1
+
+  return n+1
+
+# test cases
+assert lowest_missing([3, 4, -1, 1]) == 2
+assert lowest_missing([1, 2, 0]) == 3
+assert lowest_missing([3,3,2,-1,-4]) == 1
+assert lowest_missing([1,2,3,4]) == 5
