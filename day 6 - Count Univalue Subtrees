@@ -1,0 +1,89 @@
+"""
+Prompt: A unival tree (which stands for "universal value") is a tree where all nodes under it have the same value.
+
+        Given the root to a binary tree, count the number of unival subtrees.
+
+        For example, the following tree has 5 unival subtrees:
+
+           0
+          / \
+         1   0
+            / \
+           1   0
+          / \
+         1   1
+  
+Difficulty: Easy
+
+Approach: My approach was to use recursion to check each subtree. For every node, compares its value with its children and recursively 
+          verify if both left and right subtrees are unival. Then, use a separate function to traverse the tree, count unival subtrees in 
+          the left and right branches, and add one if the current node’s subtree is unival. This ensures all nodes are checked in a bottom-up manner.
+
+
+Time Complexity: O(n^2)
+Space Complexity: O(n) 
+
+"""
+
+class Node:
+  def __init__(self, value):
+    self.value = value
+    self.left = None
+    self.right = None
+
+def check_unival(root):
+  # no nodes is still a unival tree
+    if root is None:
+        return True
+  # check if left node is equivalent to current node
+    if root.left and root.left.value != root.value:
+      return False
+  # check if right node is equivalent to current node
+    if root.right and root.right.value != root.value:
+      return False
+
+    return check_unival(root.left) and check_unival(root.right)
+
+
+def count_unival(root):
+  if root is None:
+    return 0
+# count left and right subtree
+  total = count_unival(root.left)+count_unival(root.right)
+# if the current node is a unival tree, add to count
+  if check_unival(root):
+    return 1 + total
+  return total
+
+# test cases
+
+# case 1: given case
+root = Node(0)
+
+root.left = Node(1)
+root.right = Node(0)
+
+root.right.left = Node(1)
+root.right.right = Node(0)
+
+root.right.left.left = Node(1)
+root.right.left.right = Node(1)
+
+# case 2: tried to address some other possibilites
+root2 = Node(1)
+
+root2.left = Node(1)
+root2.right = Node(0)
+
+root2.left.left = Node(1)
+root2.left.right = Node(1)
+
+root2.right.right = Node(0)
+root2.right.right.left = Node(0)
+
+# case 3: Null case
+root3 = None
+
+assert count_unival(root) == 5
+assert count_unival(root2) == 6
+assert count_unival(root3) == 0
