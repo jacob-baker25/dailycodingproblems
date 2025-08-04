@@ -1,0 +1,38 @@
+"""
+Prompt:  The area of a circle is defined as πr^2. Estimate π to 3 decimal places using a Monte Carlo method.
+
+        Hint: The basic equation of a circle is x2 + y2 = r2.
+
+Difficulty: Medium
+
+Approach: Since the prompt requires a Monte Carlo method must be used, I estimated pi by randomly generating a bunch
+of points within a square that encloses a unit circle. For each point, we check whether it lies inside the circle using the equation
+x^2+ y^2 <= 1. The ratio of points inside the circle to the total number of points should be about pi/4, so multiplying this ratio by 4 gives an estimate for pi.
+
+
+Time Complexity: O(n)
+Space Complexity: O(1) 
+
+"""
+
+import random
+
+def estimate_pi(num_samples):
+    inside_circle = 0 # counts how many random points fall inside circle
+
+    for _ in range(num_samples):
+
+      # generates a random x, y point within the square with sides from -1 to 1
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+        # check if the point lies within the unit circle
+        if x**2 + y**2 <= 1:
+            inside_circle += 1
+
+    # the ratio of points inside the circle to total points approximates pi/4
+    #  multiply by 4 to estimate pi, and round to 3 decimal places
+    pi_estimate = 4 * inside_circle / num_samples
+    return round(pi_estimate, 3)
+
+# test case
+print(estimate_pi(1_000_000))
